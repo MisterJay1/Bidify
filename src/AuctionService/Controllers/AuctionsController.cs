@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Contracts;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,7 @@ public class AuctionsControllers : ControllerBase
         var query = _context.Auctions.OrderBy(x => x.Item.Make).AsQueryable();
 
         if(!string.IsNullOrEmpty(date))
-            query = query.Where(x => x.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) >0);
+            query = query.Where(x => x.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) > 0);
 
         return await query.ProjectTo<AuctionDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
@@ -49,6 +50,7 @@ public class AuctionsControllers : ControllerBase
         return _mapper.Map<AuctionDto>(auction);    
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<AuctionDto>> CreateAuction([FromBody] CreateAuctionDto createAuctionDto)
     {
@@ -56,7 +58,8 @@ public class AuctionsControllers : ControllerBase
             return BadRequest();
         
         Auction auction = _mapper.Map<Auction>(createAuctionDto);
-        auction.Seller = "test";
+
+        auction.Seller = User.Identity.Name;
 
         await _context.Auctions.AddAsync(auction);
 
@@ -73,6 +76,7 @@ public class AuctionsControllers : ControllerBase
                 new {auction.Id}, newAuction);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateAuction(Guid id, UpdateAuctionDto updateAuctionDto)
     {
@@ -81,6 +85,9 @@ public class AuctionsControllers : ControllerBase
 
         if (auction == null)
             return NotFound();
+
+        if (auction.Seller != User.Identity.Name)
+            return Forbid();
 
         auction.Item.Make = updateAuctionDto.Make ?? auction.Item.Make;
         auction.Item.Model = updateAuctionDto.Model ?? auction.Item.Model;
@@ -98,10 +105,14 @@ public class AuctionsControllers : ControllerBase
         return BadRequest("Problem saving chages");
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAuction(Guid id)
     {
         var auction = await _context.Auctions.FindAsync(id);
+
+        if (auction.Seller != User.Identity.Name)
+            return Forbid();
 
         if (auction == null)
             return NotFound();
