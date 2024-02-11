@@ -1,8 +1,7 @@
 import React from 'react'
-import { getSession, getTokenWorkaround} from '../actions/authActions'
+import { getSession, getTokenWorkaround } from '../actions/authActions'
 import Heading from '../components/Heading';
 import AuthTest from './AuthTest';
-
 
 export default async function Session() {
     const session = await getSession();
@@ -23,7 +22,6 @@ export default async function Session() {
                 <h3 className='text-lg'>Token data</h3>
                 <pre className='overflow-auto'>{JSON.stringify(token, null, 2)}</pre>
             </div>
-           
         </div>
     )
 }

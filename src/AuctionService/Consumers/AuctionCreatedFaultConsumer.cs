@@ -1,4 +1,4 @@
-using Contracts;
+﻿using Contracts;
 using MassTransit;
 
 namespace AuctionService;
@@ -16,7 +16,9 @@ public class AuctionCreatedFaultConsumer : IConsumer<Fault<AuctionCreated>>
             context.Message.Message.Model = "FooBar";
             await context.Publish(context.Message.Message);
         }
-        else
+        else 
+        {
             Console.WriteLine("Not an argument exception - update error dashboard somewhere");
+        }
     }
 }

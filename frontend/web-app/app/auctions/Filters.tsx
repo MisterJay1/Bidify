@@ -1,6 +1,6 @@
+import { useParamsStore } from '@/hooks/useParamsStore';
 import { Button } from 'flowbite-react';
 import React from 'react'
-import { useParamsStore } from '../hooks/useParamsStore';
 import { AiOutlineClockCircle, AiOutlineSortAscending } from 'react-icons/ai';
 import { BsFillStopCircleFill, BsStopwatchFill } from 'react-icons/bs';
 import { GiFinishLine, GiFlame } from 'react-icons/gi';
@@ -68,6 +68,7 @@ export default function Filters() {
                 </Button.Group>
             </div>
 
+
             <div>
                 <span className='uppercase text-sm text-gray-500 mr-2'>Order by</span>
                 <Button.Group>
@@ -75,9 +76,9 @@ export default function Filters() {
                         <Button
                             key={value}
                             onClick={() => setParams({ orderBy: value })}
-                            color={`${orderBy === value ? 'red' : 'gray'}`}                            
+                            color={`${orderBy === value ? 'red' : 'gray'}`}
                         >
-                            <Icon className='mr-3 h-4 w-4'/>
+                            <Icon className='mr-3 h-4 w-4' />
                             {label}
                         </Button>
                     ))}
@@ -89,7 +90,7 @@ export default function Filters() {
                 <Button.Group>
                     {pageSizeButtons.map((value, i) => (
                         <Button key={i}
-                            onClick={() => setParams({pageSize: value})}
+                            onClick={() => setParams({ pageSize: value })}
                             color={`${pageSize === value ? 'red' : 'gray'}`}
                             className='focus:ring-0'
                         >
@@ -97,7 +98,7 @@ export default function Filters() {
                         </Button>
                     ))}
                 </Button.Group>
-            </div>            
+            </div>
         </div>
     )
 }

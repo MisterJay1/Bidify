@@ -1,5 +1,4 @@
-
-using AuctionService.Entities;
+﻿using AuctionService.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService.Data;
@@ -22,7 +21,7 @@ public class DbInitializer
             Console.WriteLine("Already have data - no need to seed");
             return;
         }
-        
+
         var auctions = new List<Auction>()
         {
             // 1 Ford GT

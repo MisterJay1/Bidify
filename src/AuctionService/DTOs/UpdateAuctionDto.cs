@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace AuctionService.DTOs;
+﻿namespace AuctionService.DTOs;
 
 public class UpdateAuctionDto
 {
